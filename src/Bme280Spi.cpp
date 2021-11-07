@@ -105,12 +105,9 @@ Bme280Spi::Bme280Spi(const char* path)
     std::this_thread::sleep_for(std::chrono::milliseconds(bme280_cal_meas_delay(&m_dev.settings)));
 }
 
-bme280_data Bme280Spi::getData() const
+bme280_data Bme280Spi::getData()
 {
     bme280_data result;
-    bme280_dev dev = m_dev;
-    verifyBme280Result(bme280_get_sensor_data(BME280_ALL, &result, &dev));
-    if (memcmp(&m_dev, &dev, sizeof(bme280_dev) != 0))
-        throw std::runtime_error("Bme280Spi: Unsupported operation in BME280 API");
+    verifyBme280Result(bme280_get_sensor_data(BME280_ALL, &result, &m_dev));
     return result;
 }
